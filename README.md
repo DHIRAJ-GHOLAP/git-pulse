@@ -51,21 +51,31 @@
 
 ## 📦 Installation
 
-### Using `pip` or `pipx` (Recommended)
+### 1. Install via `pipx` directly from GitHub (Recommended)
+
+`pipx` automatically manages an isolated environment and links the CLI to your PATH:
 
 ```bash
-# Recommended for CLI isolation:
-pipx install git-pulse
-
-# Or with pip:
-pip install git-pulse
+pipx install git+https://github.com/DHIRAJ-GHOLAP/git-pulse.git
 ```
 
-### From Source
+To upgrade in the future:
+```bash
+pipx upgrade git-pulse
+```
+
+### 2. From Local Source
 
 ```bash
 git clone https://github.com/DHIRAJ-GHOLAP/git-pulse.git
 cd git-pulse
+
+# Install CLI globally with pipx:
+pipx install .
+
+# Or develop inside an isolated virtual environment:
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -e .
 ```
 
