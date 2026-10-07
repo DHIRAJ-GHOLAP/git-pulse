@@ -125,11 +125,20 @@ def generate_changelog(
             total_commits=0,
         )
 
-    # If from_ref not specified, try to find the latest tag
+    # If from_ref not specified, check tags intelligently
     if not from_ref:
         tags = git_utils.get_tags(root)
         if tags:
-            from_ref = tags[0]
+            head_rev = git_utils.run_git(["rev-parse", "HEAD"], cwd=root).stdout.strip()
+            tag_rev = git_utils.run_git(["rev-parse", f"{tags[0]}^{{commit}}"], cwd=root).stdout.strip()
+            if head_rev == tag_rev and len(tags) > 1:
+                # Latest tag IS HEAD, so show changes since previous tag
+                from_ref = tags[1]
+            elif head_rev == tag_rev:
+                # Single tag pointing to HEAD, show commits in this release
+                from_ref = None
+            else:
+                from_ref = tags[0]
 
     # Build git log range
     format_str = "%H%x1f%h%x1f%an%x1f%s%x1f%b%x1e"
